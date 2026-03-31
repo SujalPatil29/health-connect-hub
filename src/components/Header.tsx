@@ -13,6 +13,7 @@ const Header = () => {
   const navItems = [
     { label: "Home", path: "/" },
     { label: "Find Doctors", path: "/doctors" },
+    { label: "Medical Stores", path: "/medical-stores" },
     ...(user ? [{ label: "Dashboard", path: "/dashboard" }] : []),
   ];
 
