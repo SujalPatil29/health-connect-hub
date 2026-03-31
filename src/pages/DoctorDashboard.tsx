@@ -232,6 +232,11 @@ const DoctorDashboard = () => {
                         <div className="flex items-center gap-2">
                           {apt.status === "BOOKED" && (
                             <>
+                              <Link to={`/consultation/${apt.id}`}>
+                                <Button size="sm" variant="secondary">
+                                  <Video className="mr-1 h-3 w-3" /> Join
+                                </Button>
+                              </Link>
                               <Button
                                 size="sm"
                                 onClick={() => completeAppointment(apt.id)}
