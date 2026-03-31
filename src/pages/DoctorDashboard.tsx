@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -14,6 +15,9 @@ import {
   AlertCircle,
   Stethoscope,
   Save,
+  Video,
+  Plus,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -187,6 +191,11 @@ const DoctorDashboard = () => {
             </div>
           </div>
 
+          {/* Slot Management */}
+          <div className="lg:col-span-2">
+            <SlotManager />
+          </div>
+
           {/* Appointments */}
           <div className="lg:col-span-2">
             <div className="rounded-xl border border-border bg-card p-6 shadow-card">
@@ -228,6 +237,11 @@ const DoctorDashboard = () => {
                         <div className="flex items-center gap-2">
                           {apt.status === "BOOKED" && (
                             <>
+                              <Link to={`/consultation/${apt.id}`}>
+                                <Button size="sm" variant="secondary">
+                                  <Video className="mr-1 h-3 w-3" /> Join
+                                </Button>
+                              </Link>
                               <Button
                                 size="sm"
                                 onClick={() => completeAppointment(apt.id)}
@@ -263,6 +277,85 @@ const DoctorDashboard = () => {
         </div>
       </div>
       <Footer />
+    </div>
+  );
+};
+
+const defaultSlots = [
+  "09:00 AM", "09:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
+  "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM",
+];
+
+const SlotManager = () => {
+  const [slots, setSlots] = useState<string[]>(defaultSlots);
+  const [newSlot, setNewSlot] = useState("");
+  const [showAdd, setShowAdd] = useState(false);
+
+  const addSlot = () => {
+    if (!newSlot.trim()) return;
+    if (slots.includes(newSlot.trim())) {
+      toast.error("Slot already exists");
+      return;
+    }
+    setSlots((prev) => [...prev, newSlot.trim()].sort());
+    setNewSlot("");
+    setShowAdd(false);
+    toast.success("Slot added");
+  };
+
+  const removeSlot = (slot: string) => {
+    setSlots((prev) => prev.filter((s) => s !== slot));
+    toast.success("Slot removed");
+  };
+
+  return (
+    <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+          <Clock className="h-5 w-5 text-primary" /> Available Slots
+        </h2>
+        <Button
+          size="sm"
+          variant={showAdd ? "outline" : "default"}
+          onClick={() => setShowAdd(!showAdd)}
+        >
+          {showAdd ? <><X className="mr-1 h-3 w-3" /> Cancel</> : <><Plus className="mr-1 h-3 w-3" /> Add Slot</>}
+        </Button>
+      </div>
+
+      {showAdd && (
+        <div className="mb-4 flex gap-2">
+          <Input
+            value={newSlot}
+            onChange={(e) => setNewSlot(e.target.value)}
+            placeholder="e.g. 06:00 PM"
+            className="max-w-xs"
+          />
+          <Button size="sm" onClick={addSlot}>Add</Button>
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-2">
+        {slots.map((slot) => (
+          <div
+            key={slot}
+            className="group inline-flex items-center gap-1 rounded-lg border border-border bg-secondary px-3 py-1.5 text-sm font-medium text-secondary-foreground"
+          >
+            {slot}
+            <button
+              onClick={() => removeSlot(slot)}
+              className="ml-1 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          </div>
+        ))}
+      </div>
+      {slots.length === 0 && (
+        <p className="text-sm text-muted-foreground text-center py-4">
+          No slots configured. Add slots for patients to book.
+        </p>
+      )}
     </div>
   );
 };
