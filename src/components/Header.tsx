@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Heart, Menu, X, LogOut, LayoutDashboard } from "lucide-react";
+import { Heart, Menu, X, LogOut, LayoutDashboard, Settings, User } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
