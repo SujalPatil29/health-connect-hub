@@ -1,0 +1,270 @@
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Calendar,
+  Clock,
+  Users,
+  CheckCircle,
+  DollarSign,
+  AlertCircle,
+  Stethoscope,
+  Save,
+} from "lucide-react";
+import { toast } from "sonner";
+
+const DoctorDashboard = () => {
+  const { user, appointments, doctorProfiles, addDoctorProfile, completeAppointment, cancelAppointment } = useAuth();
+
+  const profile = doctorProfiles.find((p) => p.userId === user?.id);
+  const myAppointments = appointments.filter((a) => a.doctorId === user?.id);
+  const upcoming = myAppointments.filter((a) => a.status === "BOOKED");
+  const completed = myAppointments.filter((a) => a.status === "COMPLETED");
+
+  const [editMode, setEditMode] = useState(!profile?.specialization);
+  const [form, setForm] = useState({
+    specialization: profile?.specialization || "",
+    experience: profile?.experience?.toString() || "",
+    fees: profile?.fees?.toString() || "",
+    education: profile?.education || "",
+    hospital: profile?.hospital || "",
+  });
+
+  const handleSaveProfile = () => {
+    if (!user) return;
+    addDoctorProfile({
+      userId: user.id,
+      specialization: form.specialization,
+      experience: parseInt(form.experience) || 0,
+      fees: parseFloat(form.fees) || 0,
+      verified: profile?.verified || false,
+      education: form.education,
+      hospital: form.hospital,
+    });
+    setEditMode(false);
+    toast.success("Profile updated!");
+  };
+
+  const totalEarnings = completed.reduce((sum, a) => sum + a.fees, 0);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="container py-8">
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="font-heading text-3xl font-bold text-foreground">
+              Doctor Dashboard
+            </h1>
+            <p className="mt-1 text-muted-foreground">Welcome, {user?.name}</p>
+          </div>
+          {profile && !profile.verified && (
+            <div className="rounded-lg border border-accent bg-accent/10 px-4 py-2 text-sm">
+              <span className="flex items-center gap-2 text-accent-foreground font-medium">
+                <AlertCircle className="h-4 w-4" /> Pending Verification
+              </span>
+            </div>
+          )}
+          {profile?.verified && (
+            <div className="rounded-lg border border-primary/30 bg-secondary px-4 py-2 text-sm">
+              <span className="flex items-center gap-2 text-primary font-medium">
+                <CheckCircle className="h-4 w-4" /> Verified Doctor
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Stats */}
+        <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {[
+            { label: "Total Patients", value: myAppointments.length, icon: Users, color: "text-primary" },
+            { label: "Upcoming", value: upcoming.length, icon: Clock, color: "text-blue-500" },
+            { label: "Completed", value: completed.length, icon: CheckCircle, color: "text-green-500" },
+            { label: "Earnings", value: `$${totalEarnings}`, icon: DollarSign, color: "text-accent-foreground" },
+          ].map((stat) => (
+            <div key={stat.label} className="rounded-xl border border-border bg-card p-5 shadow-card">
+              <stat.icon className={`h-5 w-5 ${stat.color} mb-2`} />
+              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+              <p className="text-xs text-muted-foreground">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-3">
+          {/* Profile */}
+          <div className="lg:col-span-1">
+            <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+                  <Stethoscope className="h-5 w-5 text-primary" /> My Profile
+                </h2>
+                {!editMode && (
+                  <Button variant="ghost" size="sm" onClick={() => setEditMode(true)}>
+                    Edit
+                  </Button>
+                )}
+              </div>
+
+              {editMode ? (
+                <div className="space-y-3">
+                  <div>
+                    <Label className="text-xs">Specialization</Label>
+                    <Input
+                      value={form.specialization}
+                      onChange={(e) => setForm({ ...form, specialization: e.target.value })}
+                      placeholder="e.g. Cardiologist"
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Experience (years)</Label>
+                    <Input
+                      type="number"
+                      value={form.experience}
+                      onChange={(e) => setForm({ ...form, experience: e.target.value })}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Consultation Fee ($)</Label>
+                    <Input
+                      type="number"
+                      value={form.fees}
+                      onChange={(e) => setForm({ ...form, fees: e.target.value })}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Education</Label>
+                    <Input
+                      value={form.education}
+                      onChange={(e) => setForm({ ...form, education: e.target.value })}
+                      placeholder="e.g. MD - Harvard"
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs">Hospital</Label>
+                    <Input
+                      value={form.hospital}
+                      onChange={(e) => setForm({ ...form, hospital: e.target.value })}
+                      placeholder="e.g. City Hospital"
+                      className="mt-1"
+                    />
+                  </div>
+                  <Button onClick={handleSaveProfile} className="w-full mt-2">
+                    <Save className="mr-2 h-4 w-4" /> Save Profile
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-3 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Specialization</span>
+                    <span className="font-medium text-foreground">{profile?.specialization || "—"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Experience</span>
+                    <span className="font-medium text-foreground">{profile?.experience || 0} years</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Fee</span>
+                    <span className="font-medium text-foreground">${profile?.fees || 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Education</span>
+                    <span className="font-medium text-foreground">{profile?.education || "—"}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Hospital</span>
+                    <span className="font-medium text-foreground">{profile?.hospital || "—"}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Appointments */}
+          <div className="lg:col-span-2">
+            <div className="rounded-xl border border-border bg-card p-6 shadow-card">
+              <h2 className="font-heading text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-primary" /> Appointments
+              </h2>
+
+              {myAppointments.length === 0 ? (
+                <div className="py-12 text-center">
+                  <AlertCircle className="mx-auto h-10 w-10 text-muted-foreground mb-3" />
+                  <p className="text-foreground font-medium">No appointments yet</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {profile?.verified
+                      ? "Patients will book with you once your profile is complete"
+                      : "Complete your profile and wait for admin verification"}
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {myAppointments
+                    .sort((a, b) => {
+                      const order = { BOOKED: 0, COMPLETED: 1, CANCELLED: 2 };
+                      return order[a.status] - order[b.status];
+                    })
+                    .map((apt) => (
+                      <div
+                        key={apt.id}
+                        className="flex items-center gap-4 rounded-lg border border-border p-4"
+                      >
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
+                          <Users className="h-5 w-5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-foreground text-sm">{apt.patientName}</h4>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(apt.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })} · {apt.timeSlot}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {apt.status === "BOOKED" && (
+                            <>
+                              <Button
+                                size="sm"
+                                onClick={() => completeAppointment(apt.id)}
+                              >
+                                <CheckCircle className="mr-1 h-3 w-3" /> Complete
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => cancelAppointment(apt.id)}
+                              >
+                                Cancel
+                              </Button>
+                            </>
+                          )}
+                          {apt.status === "COMPLETED" && (
+                            <span className="rounded-full bg-green-50 border border-green-200 text-green-700 px-2.5 py-0.5 text-xs font-medium">
+                              Completed
+                            </span>
+                          )}
+                          {apt.status === "CANCELLED" && (
+                            <span className="rounded-full bg-red-50 border border-red-200 text-red-700 px-2.5 py-0.5 text-xs font-medium">
+                              Cancelled
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default DoctorDashboard;

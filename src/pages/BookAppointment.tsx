@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Star, Clock, MapPin, GraduationCap, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import { doctors, timeSlots } from "@/data/doctors";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 const BookAppointment = () => {
   const { id } = useParams();
@@ -32,11 +33,32 @@ const BookAppointment = () => {
     );
   }
 
+  const { user, addAppointment } = useAuth();
+  const navigate = useNavigate();
+
   const handleBook = () => {
     if (!date || !selectedSlot) {
       toast.error("Please select a date and time slot");
       return;
     }
+    if (!user) {
+      toast.error("Please log in to book an appointment");
+      navigate("/login");
+      return;
+    }
+    addAppointment({
+      doctorId: doctor.id,
+      doctorName: doctor.name,
+      doctorSpecialization: doctor.specialization,
+      doctorImage: doctor.image,
+      patientId: user.id,
+      patientName: user.name,
+      patientEmail: user.email,
+      date: date.toISOString().split("T")[0],
+      timeSlot: selectedSlot,
+      status: "BOOKED",
+      fees: doctor.fees,
+    });
     setBooked(true);
     toast.success("Appointment booked successfully!");
   };
