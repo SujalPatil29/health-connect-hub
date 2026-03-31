@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, User, XCircle, CheckCircle, AlertCircle } from "lucide-react";
+import { Calendar, Clock, User, XCircle, CheckCircle, AlertCircle, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const statusStyles = {
@@ -88,6 +88,11 @@ const PatientDashboard = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-foreground">${apt.fees}</span>
+                    <Link to={`/consultation/${apt.id}`}>
+                      <Button size="sm" variant="secondary">
+                        <Video className="mr-1 h-3 w-3" /> Join Call
+                      </Button>
+                    </Link>
                     <Button
                       variant="outline"
                       size="sm"
