@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, User, XCircle, CheckCircle, AlertCircle } from "lucide-react";
+import { Calendar, Clock, User, XCircle, CheckCircle, AlertCircle, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const statusStyles = {
