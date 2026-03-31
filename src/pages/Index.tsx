@@ -249,7 +249,4 @@ const Index = () => {
   );
 };
 
-// Import Star here for the stats section
-import { Star } from "lucide-react";
-
 export default Index;
