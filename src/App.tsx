@@ -10,6 +10,8 @@ import BookAppointment from "./pages/BookAppointment.tsx";
 import Login from "./pages/Login.tsx";
 import Signup from "./pages/Signup.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
+import MedicalStores from "./pages/MedicalStores.tsx";
+import VideoConsultation from "./pages/VideoConsultation.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -28,8 +30,15 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/medical-stores" element={<MedicalStores />} />
+            <Route path="/consultation/:appointmentId" element={<VideoConsultation />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
