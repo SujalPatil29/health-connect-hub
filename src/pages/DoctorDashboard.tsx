@@ -19,7 +19,6 @@ import {
   Plus,
   X,
 } from "lucide-react";
-} from "lucide-react";
 import { toast } from "sonner";
 
 const DoctorDashboard = () => {
