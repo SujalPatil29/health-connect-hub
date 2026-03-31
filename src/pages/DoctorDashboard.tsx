@@ -15,6 +15,10 @@ import {
   AlertCircle,
   Stethoscope,
   Save,
+  Video,
+  Plus,
+  X,
+} from "lucide-react";
 } from "lucide-react";
 import { toast } from "sonner";
 
