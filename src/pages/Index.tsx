@@ -101,9 +101,11 @@ const Index = () => {
                   <ArrowRight className="ml-1 h-4 w-4" />
                 </Button>
               </Link>
-              <Button variant="hero-outline" size="xl">
-                Video Consultation
-              </Button>
+              <Link to="/medical-stores">
+                <Button variant="hero-outline" size="xl">
+                  Find Medical Stores
+                </Button>
+              </Link>
             </motion.div>
 
             <motion.div
