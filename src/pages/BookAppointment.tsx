@@ -108,8 +108,8 @@ const BookAppointment = () => {
                   Find More Doctors
                 </Button>
               </Link>
-              <Link to="/" className="flex-1">
-                <Button className="w-full">Go Home</Button>
+              <Link to="/dashboard" className="flex-1">
+                <Button className="w-full">My Appointments</Button>
               </Link>
             </div>
           </div>
