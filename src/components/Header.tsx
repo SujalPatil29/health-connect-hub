@@ -59,6 +59,18 @@ const Header = () => {
                   {user.name.split(" ")[0]}
                 </Button>
               </Link>
+              {user.role === "PATIENT" && (
+                <Link to="/profile">
+                  <Button variant="ghost" size="icon" className="h-9 w-9">
+                    <User className="h-4 w-4" />
+                  </Button>
+                </Link>
+              )}
+              <Link to="/settings">
+                <Button variant="ghost" size="icon" className="h-9 w-9">
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </Link>
               <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
                 {user.role}
               </span>
