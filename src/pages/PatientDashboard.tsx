@@ -88,6 +88,11 @@ const PatientDashboard = () => {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-bold text-foreground">${apt.fees}</span>
+                    <Link to={`/consultation/${apt.id}`}>
+                      <Button size="sm" variant="secondary">
+                        <Video className="mr-1 h-3 w-3" /> Join Call
+                      </Button>
+                    </Link>
                     <Button
                       variant="outline"
                       size="sm"
