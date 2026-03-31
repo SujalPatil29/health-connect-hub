@@ -191,6 +191,11 @@ const DoctorDashboard = () => {
             </div>
           </div>
 
+          {/* Slot Management */}
+          <div className="lg:col-span-2">
+            <SlotManager />
+          </div>
+
           {/* Appointments */}
           <div className="lg:col-span-2">
             <div className="rounded-xl border border-border bg-card p-6 shadow-card">
