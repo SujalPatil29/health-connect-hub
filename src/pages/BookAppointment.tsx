@@ -33,11 +33,32 @@ const BookAppointment = () => {
     );
   }
 
+  const { user, addAppointment } = useAuth();
+  const navigate = useNavigate();
+
   const handleBook = () => {
     if (!date || !selectedSlot) {
       toast.error("Please select a date and time slot");
       return;
     }
+    if (!user) {
+      toast.error("Please log in to book an appointment");
+      navigate("/login");
+      return;
+    }
+    addAppointment({
+      doctorId: doctor.id,
+      doctorName: doctor.name,
+      doctorSpecialization: doctor.specialization,
+      doctorImage: doctor.image,
+      patientId: user.id,
+      patientName: user.name,
+      patientEmail: user.email,
+      date: date.toISOString().split("T")[0],
+      timeSlot: selectedSlot,
+      status: "BOOKED",
+      fees: doctor.fees,
+    });
     setBooked(true);
     toast.success("Appointment booked successfully!");
   };
