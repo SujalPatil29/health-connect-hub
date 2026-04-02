@@ -41,6 +41,35 @@ const fadeUp = {
 const MedicalStores = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [locationStatus, setLocationStatus] = useState<string>("");
+
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationStatus("Geolocation not supported by your browser");
+      return;
+    }
+    setLocationStatus("Locating...");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+        setLocationStatus(`Location found: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`);
+      },
+      (error) => {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setLocationStatus("Location permission denied. Please enable it in browser settings.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setLocationStatus("Location unavailable. Try again later.");
+            break;
+          default:
+            setLocationStatus("Could not get location. Try again.");
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
 
   const filtered = useMemo(() => {
     return medicalStores.filter((store) => {
@@ -80,10 +109,15 @@ const MedicalStores = () => {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="sm" className="w-fit">
-            <Navigation className="mr-1 h-4 w-4" /> Use My Location
+          <Button variant="outline" size="sm" className="w-fit" onClick={handleUseMyLocation}>
+            <Navigation className="mr-1 h-4 w-4" /> {locationStatus === "Locating..." ? "Locating..." : "Use My Location"}
           </Button>
         </div>
+        {locationStatus && locationStatus !== "Locating..." && (
+          <p className={`mt-2 text-sm ${userLocation ? "text-green-600" : "text-destructive"}`}>
+            {locationStatus}
+          </p>
+        )}
 
         {/* Category Chips */}
         <div className="mt-5 flex flex-wrap gap-2">
