@@ -109,10 +109,15 @@ const MedicalStores = () => {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="sm" className="w-fit">
-            <Navigation className="mr-1 h-4 w-4" /> Use My Location
+          <Button variant="outline" size="sm" className="w-fit" onClick={handleUseMyLocation}>
+            <Navigation className="mr-1 h-4 w-4" /> {locationStatus === "Locating..." ? "Locating..." : "Use My Location"}
           </Button>
         </div>
+        {locationStatus && locationStatus !== "Locating..." && (
+          <p className={`mt-2 text-sm ${userLocation ? "text-green-600" : "text-destructive"}`}>
+            {locationStatus}
+          </p>
+        )}
 
         {/* Category Chips */}
         <div className="mt-5 flex flex-wrap gap-2">
