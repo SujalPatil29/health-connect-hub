@@ -41,6 +41,35 @@ const fadeUp = {
 const MedicalStores = () => {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [locationStatus, setLocationStatus] = useState<string>("");
+
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationStatus("Geolocation not supported by your browser");
+      return;
+    }
+    setLocationStatus("Locating...");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
+        setLocationStatus(`Location found: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}`);
+      },
+      (error) => {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            setLocationStatus("Location permission denied. Please enable it in browser settings.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            setLocationStatus("Location unavailable. Try again later.");
+            break;
+          default:
+            setLocationStatus("Could not get location. Try again.");
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
 
   const filtered = useMemo(() => {
     return medicalStores.filter((store) => {
