@@ -99,7 +99,7 @@ const BookAppointment = () => {
               </div>
               <div className="flex justify-between py-1">
                 <span className="text-muted-foreground">Fee</span>
-                <span className="font-medium text-foreground">${doctor.fees}</span>
+                <span className="font-medium text-foreground">₹{doctor.fees}</span>
               </div>
             </div>
             <div className="mt-6 flex gap-3">
