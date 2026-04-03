@@ -239,7 +239,7 @@ const BookAppointment = () => {
                   </div>
                   <div className="flex justify-between border-t border-border pt-2 mt-2">
                     <span className="font-medium text-foreground">Total</span>
-                    <span className="font-bold text-foreground">${doctor.fees}</span>
+                    <span className="font-bold text-foreground">₹{doctor.fees}</span>
                   </div>
                 </div>
                 <Button

@@ -176,7 +176,7 @@ const DoctorDashboard = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Fee</span>
-                    <span className="font-medium text-foreground">${profile?.fees || 0}</span>
+                    <span className="font-medium text-foreground">₹{profile?.fees || 0}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Education</span>

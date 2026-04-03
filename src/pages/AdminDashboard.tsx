@@ -213,7 +213,7 @@ const AdminDashboard = () => {
                               {apt.status}
                             </span>
                           </td>
-                          <td className="py-3 font-medium text-foreground">${apt.fees}</td>
+                          <td className="py-3 font-medium text-foreground">₹{apt.fees}</td>
                         </tr>
                       ))}
                   </tbody>

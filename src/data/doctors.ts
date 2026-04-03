@@ -131,7 +131,7 @@ export const doctors: Doctor[] = [
     name: "Dr. David Kim",
     specialization: "ENT Specialist",
     experience: 9,
-    fees: 130,
+    fees: 700,
     rating: 4.7,
     reviews: 178,
     image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=300&h=300&fit=crop&crop=face",

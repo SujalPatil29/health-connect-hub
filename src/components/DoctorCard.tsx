@@ -43,7 +43,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
 
       <div className="mt-4 flex items-center justify-between">
         <div>
-          <span className="text-lg font-bold text-foreground">${doctor.fees}</span>
+          <span className="text-lg font-bold text-foreground">₹{doctor.fees}</span>
           <span className="text-xs text-muted-foreground ml-1">/ visit</span>
         </div>
         <div className="flex items-center gap-2">

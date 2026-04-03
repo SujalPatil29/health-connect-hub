@@ -82,7 +82,7 @@ const seedAppointments: Appointment[] = [
     date: new Date(Date.now() + 86400000 * 2).toISOString().split("T")[0],
     timeSlot: "10:00 AM",
     status: "BOOKED",
-    fees: 150,
+    fees: 800,
   },
 ];
 
