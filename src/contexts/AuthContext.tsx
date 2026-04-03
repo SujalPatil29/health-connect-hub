@@ -62,18 +62,18 @@ const DOCTOR_PROFILES_KEY = "medibook_doctor_profiles";
 const seedUsers: (User & { password: string })[] = [
   { id: "admin-1", name: "Admin User", email: "admin@medibook.com", password: "admin123", role: "ADMIN" },
   { id: "patient-1", name: "John Doe", email: "patient@medibook.com", password: "patient123", role: "PATIENT" },
-  { id: "doctor-1", name: "Dr. Sarah Mitchell", email: "doctor@medibook.com", password: "doctor123", role: "DOCTOR" },
+  { id: "doctor-1", name: "Dr. Anjali Mehta", email: "doctor@medibook.com", password: "doctor123", role: "DOCTOR" },
 ];
 
 const seedDoctorProfiles: DoctorProfile[] = [
-  { userId: "doctor-1", specialization: "Cardiologist", experience: 12, fees: 800, verified: true, education: "MD, FACC - Johns Hopkins", hospital: "City Heart Center" },
+  { userId: "doctor-1", specialization: "Cardiologist", experience: 14, fees: 800, verified: true, education: "MD, DM Cardiology - AIIMS Delhi", hospital: "Fortis Escorts Heart Institute, Delhi" },
 ];
 
 const seedAppointments: Appointment[] = [
   {
     id: "apt-1",
     doctorId: "doctor-1",
-    doctorName: "Dr. Sarah Mitchell",
+    doctorName: "Dr. Anjali Mehta",
     doctorSpecialization: "Cardiologist",
     doctorImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&crop=face",
     patientId: "patient-1",
