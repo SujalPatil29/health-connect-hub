@@ -62,7 +62,7 @@ const DOCTOR_PROFILES_KEY = "medibook_doctor_profiles";
 const seedUsers: (User & { password: string })[] = [
   { id: "admin-1", name: "Admin User", email: "admin@medibook.com", password: "admin123", role: "ADMIN" },
   { id: "patient-1", name: "John Doe", email: "patient@medibook.com", password: "patient123", role: "PATIENT" },
-  { id: "doctor-1", name: "Dr. Sarah Mitchell", email: "doctor@medibook.com", password: "doctor123", role: "DOCTOR" },
+  { id: "doctor-1", name: "Dr. Anjali Mehta", email: "doctor@medibook.com", password: "doctor123", role: "DOCTOR" },
 ];
 
 const seedDoctorProfiles: DoctorProfile[] = [
