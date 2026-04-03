@@ -99,7 +99,7 @@ const BookAppointment = () => {
               </div>
               <div className="flex justify-between py-1">
                 <span className="text-muted-foreground">Fee</span>
-                <span className="font-medium text-foreground">${doctor.fees}</span>
+                <span className="font-medium text-foreground">₹{doctor.fees}</span>
               </div>
             </div>
             <div className="mt-6 flex gap-3">
@@ -169,7 +169,7 @@ const BookAppointment = () => {
 
               <div className="mt-5 rounded-lg bg-secondary p-3 text-center">
                 <span className="text-sm text-muted-foreground">Consultation Fee</span>
-                <p className="text-2xl font-bold text-foreground">${doctor.fees}</p>
+                <p className="text-2xl font-bold text-foreground">₹{doctor.fees}</p>
               </div>
             </div>
           </div>
@@ -239,7 +239,7 @@ const BookAppointment = () => {
                   </div>
                   <div className="flex justify-between border-t border-border pt-2 mt-2">
                     <span className="font-medium text-foreground">Total</span>
-                    <span className="font-bold text-foreground">${doctor.fees}</span>
+                    <span className="font-bold text-foreground">₹{doctor.fees}</span>
                   </div>
                 </div>
                 <Button

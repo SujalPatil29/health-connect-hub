@@ -66,7 +66,7 @@ const seedUsers: (User & { password: string })[] = [
 ];
 
 const seedDoctorProfiles: DoctorProfile[] = [
-  { userId: "doctor-1", specialization: "Cardiologist", experience: 12, fees: 150, verified: true, education: "MD, FACC - Johns Hopkins", hospital: "City Heart Center" },
+  { userId: "doctor-1", specialization: "Cardiologist", experience: 12, fees: 800, verified: true, education: "MD, FACC - Johns Hopkins", hospital: "City Heart Center" },
 ];
 
 const seedAppointments: Appointment[] = [
@@ -82,7 +82,7 @@ const seedAppointments: Appointment[] = [
     date: new Date(Date.now() + 86400000 * 2).toISOString().split("T")[0],
     timeSlot: "10:00 AM",
     status: "BOOKED",
-    fees: 150,
+    fees: 800,
   },
 ];
 

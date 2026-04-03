@@ -88,7 +88,7 @@ const DoctorDashboard = () => {
             { label: "Total Patients", value: myAppointments.length, icon: Users, color: "text-primary" },
             { label: "Upcoming", value: upcoming.length, icon: Clock, color: "text-blue-500" },
             { label: "Completed", value: completed.length, icon: CheckCircle, color: "text-green-500" },
-            { label: "Earnings", value: `$${totalEarnings}`, icon: DollarSign, color: "text-accent-foreground" },
+            { label: "Earnings", value: `₹${totalEarnings}`, icon: DollarSign, color: "text-accent-foreground" },
           ].map((stat) => (
             <div key={stat.label} className="rounded-xl border border-border bg-card p-5 shadow-card">
               <stat.icon className={`h-5 w-5 ${stat.color} mb-2`} />
@@ -176,7 +176,7 @@ const DoctorDashboard = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Fee</span>
-                    <span className="font-medium text-foreground">${profile?.fees || 0}</span>
+                    <span className="font-medium text-foreground">₹{profile?.fees || 0}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Education</span>
