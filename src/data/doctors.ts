@@ -33,7 +33,7 @@ export const doctors: Doctor[] = [
     name: "Dr. Sarah Mitchell",
     specialization: "Cardiologist",
     experience: 12,
-    fees: 150,
+    fees: 800,
     rating: 4.9,
     reviews: 328,
     image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&crop=face",
