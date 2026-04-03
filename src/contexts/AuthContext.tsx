@@ -66,7 +66,7 @@ const seedUsers: (User & { password: string })[] = [
 ];
 
 const seedDoctorProfiles: DoctorProfile[] = [
-  { userId: "doctor-1", specialization: "Cardiologist", experience: 12, fees: 800, verified: true, education: "MD, FACC - Johns Hopkins", hospital: "City Heart Center" },
+  { userId: "doctor-1", specialization: "Cardiologist", experience: 14, fees: 800, verified: true, education: "MD, DM Cardiology - AIIMS Delhi", hospital: "Fortis Escorts Heart Institute, Delhi" },
 ];
 
 const seedAppointments: Appointment[] = [
