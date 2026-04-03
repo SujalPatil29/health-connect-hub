@@ -117,7 +117,7 @@ export const doctors: Doctor[] = [
     name: "Dr. Lisa Park",
     specialization: "Gynecologist",
     experience: 14,
-    fees: 160,
+    fees: 850,
     rating: 4.9,
     reviews: 267,
     image: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?w=300&h=300&fit=crop&crop=face",
