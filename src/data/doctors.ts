@@ -89,7 +89,7 @@ export const doctors: Doctor[] = [
     name: "Dr. Emily Watson",
     specialization: "Neurologist",
     experience: 10,
-    fees: 180,
+    fees: 900,
     rating: 4.8,
     reviews: 142,
     image: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=300&h=300&fit=crop&crop=face",
