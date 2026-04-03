@@ -75,7 +75,7 @@ export const doctors: Doctor[] = [
     name: "Dr. Michael Roberts",
     specialization: "Orthopedic",
     experience: 20,
-    fees: 200,
+    fees: 1000,
     rating: 4.7,
     reviews: 189,
     image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=300&h=300&fit=crop&crop=face",
