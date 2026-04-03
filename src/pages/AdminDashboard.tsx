@@ -152,7 +152,7 @@ const AdminDashboard = () => {
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-foreground text-sm">{docUser?.name || "Unknown"}</h4>
                         <p className="text-xs text-muted-foreground">
-                          {profile.specialization} · {profile.experience} yrs · ${profile.fees}/visit
+                          {profile.specialization} · {profile.experience} yrs · ₹{profile.fees}/visit
                         </p>
                       </div>
                       <span className="text-xs text-muted-foreground">
