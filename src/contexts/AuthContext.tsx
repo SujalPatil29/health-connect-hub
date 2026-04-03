@@ -73,7 +73,7 @@ const seedAppointments: Appointment[] = [
   {
     id: "apt-1",
     doctorId: "doctor-1",
-    doctorName: "Dr. Sarah Mitchell",
+    doctorName: "Dr. Anjali Mehta",
     doctorSpecialization: "Cardiologist",
     doctorImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&crop=face",
     patientId: "patient-1",
