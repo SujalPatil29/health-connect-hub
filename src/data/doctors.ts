@@ -61,7 +61,7 @@ export const doctors: Doctor[] = [
     name: "Dr. Priya Sharma",
     specialization: "Pediatrician",
     experience: 15,
-    fees: 100,
+    fees: 500,
     rating: 4.9,
     reviews: 456,
     image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=300&h=300&fit=crop&crop=face",
