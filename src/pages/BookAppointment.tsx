@@ -169,7 +169,7 @@ const BookAppointment = () => {
 
               <div className="mt-5 rounded-lg bg-secondary p-3 text-center">
                 <span className="text-sm text-muted-foreground">Consultation Fee</span>
-                <p className="text-2xl font-bold text-foreground">${doctor.fees}</p>
+                <p className="text-2xl font-bold text-foreground">₹{doctor.fees}</p>
               </div>
             </div>
           </div>
