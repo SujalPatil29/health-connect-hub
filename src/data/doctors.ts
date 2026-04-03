@@ -47,7 +47,7 @@ export const doctors: Doctor[] = [
     name: "Dr. James Chen",
     specialization: "Dermatologist",
     experience: 8,
-    fees: 120,
+    fees: 600,
     rating: 4.8,
     reviews: 215,
     image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=300&h=300&fit=crop&crop=face",
