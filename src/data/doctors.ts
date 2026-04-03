@@ -103,7 +103,7 @@ export const doctors: Doctor[] = [
     name: "Dr. Raj Patel",
     specialization: "General Physician",
     experience: 18,
-    fees: 80,
+    fees: 400,
     rating: 4.6,
     reviews: 534,
     image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=300&h=300&fit=crop&crop=face",
