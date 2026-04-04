@@ -51,6 +51,7 @@ interface AuthContextType {
   user: User | null;
   appointments: Appointment[];
   doctorProfiles: DoctorProfile[];
+  prescriptions: Prescription[];
   login: (email: string, password: string) => { success: boolean; error?: string };
   signup: (name: string, email: string, password: string, role: UserRole) => { success: boolean; error?: string };
   logout: () => void;
@@ -58,6 +59,7 @@ interface AuthContextType {
   cancelAppointment: (id: string) => void;
   completeAppointment: (id: string) => void;
   addDoctorProfile: (profile: DoctorProfile) => void;
+  addPrescription: (prescription: Omit<Prescription, "id">) => void;
   verifyDoctor: (userId: string) => void;
   rejectDoctor: (userId: string) => void;
   getAllUsers: () => User[];
