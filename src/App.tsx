@@ -57,6 +57,7 @@ const App = () => (
                   <MedicalRecords />
                 </ProtectedRoute>
               }
+            />
             <Route
               path="/settings"
               element={
