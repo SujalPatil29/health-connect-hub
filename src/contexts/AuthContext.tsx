@@ -124,11 +124,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [doctorProfiles, setDoctorProfiles] = useState<DoctorProfile[]>(() =>
     getStored(DOCTOR_PROFILES_KEY, seedDoctorProfiles)
   );
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>(() =>
+    getStored(PRESCRIPTIONS_KEY, [])
+  );
 
   useEffect(() => localStorage.setItem(USERS_KEY, JSON.stringify(users)), [users]);
   useEffect(() => localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user)), [user]);
   useEffect(() => localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments)), [appointments]);
   useEffect(() => localStorage.setItem(DOCTOR_PROFILES_KEY, JSON.stringify(doctorProfiles)), [doctorProfiles]);
+  useEffect(() => localStorage.setItem(PRESCRIPTIONS_KEY, JSON.stringify(prescriptions)), [prescriptions]);
 
   const login = (email: string, password: string) => {
     const found = users.find((u) => u.email === email && u.password === password);
