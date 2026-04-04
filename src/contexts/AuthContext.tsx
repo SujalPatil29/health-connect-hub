@@ -24,6 +24,19 @@ export interface Appointment {
   fees: number;
 }
 
+export interface Prescription {
+  id: string;
+  appointmentId: string;
+  doctorId: string;
+  doctorName: string;
+  patientId: string;
+  patientName: string;
+  date: string;
+  diagnosis: string;
+  medicines: { name: string; dosage: string; duration: string }[];
+  notes: string;
+}
+
 export interface DoctorProfile {
   userId: string;
   specialization: string;
