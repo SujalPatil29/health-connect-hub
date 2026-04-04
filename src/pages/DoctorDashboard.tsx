@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, Prescription } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Calendar,
   Clock,
@@ -18,11 +19,13 @@ import {
   Video,
   Plus,
   X,
+  FileText,
+  Pill,
 } from "lucide-react";
 import { toast } from "sonner";
 
 const DoctorDashboard = () => {
-  const { user, appointments, doctorProfiles, addDoctorProfile, completeAppointment, cancelAppointment } = useAuth();
+  const { user, appointments, doctorProfiles, addDoctorProfile, completeAppointment, cancelAppointment, addPrescription, prescriptions } = useAuth();
 
   const profile = doctorProfiles.find((p) => p.userId === user?.id);
   const myAppointments = appointments.filter((a) => a.doctorId === user?.id);
