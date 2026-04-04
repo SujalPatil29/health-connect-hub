@@ -261,9 +261,26 @@ const DoctorDashboard = () => {
                             </>
                           )}
                           {apt.status === "COMPLETED" && (
-                            <span className="rounded-full bg-green-50 border border-green-200 text-green-700 px-2.5 py-0.5 text-xs font-medium">
-                              Completed
-                            </span>
+                            <div className="flex items-center gap-2">
+                              {!prescriptions.find((p) => p.appointmentId === apt.id) ? (
+                                <PrescriptionForm
+                                  appointmentId={apt.id}
+                                  doctorId={user?.id || ""}
+                                  doctorName={user?.name || ""}
+                                  patientId={apt.patientId}
+                                  patientName={apt.patientName}
+                                  date={apt.date}
+                                  onSubmit={addPrescription}
+                                />
+                              ) : (
+                                <span className="rounded-full bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-medium flex items-center gap-1">
+                                  <FileText className="h-3 w-3" /> Rx Added
+                                </span>
+                              )}
+                              <span className="rounded-full bg-green-50 border border-green-200 text-green-700 px-2.5 py-0.5 text-xs font-medium">
+                                Completed
+                              </span>
+                            </div>
                           )}
                           {apt.status === "CANCELLED" && (
                             <span className="rounded-full bg-red-50 border border-red-200 text-red-700 px-2.5 py-0.5 text-xs font-medium">
