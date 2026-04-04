@@ -72,6 +72,7 @@ const USERS_KEY = "medibook_users";
 const CURRENT_USER_KEY = "medibook_current_user";
 const APPOINTMENTS_KEY = "medibook_appointments";
 const DOCTOR_PROFILES_KEY = "medibook_doctor_profiles";
+const PRESCRIPTIONS_KEY = "medibook_prescriptions";
 
 // Seed data
 const seedUsers: (User & { password: string })[] = [
