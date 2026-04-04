@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Heart, Menu, X, LogOut, LayoutDashboard, Settings, User } from "lucide-react";
+import { Heart, Menu, X, LogOut, LayoutDashboard, Settings, User, FileText } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -60,11 +60,18 @@ const Header = () => {
                 </Button>
               </Link>
               {user.role === "PATIENT" && (
-                <Link to="/profile">
-                  <Button variant="ghost" size="icon" className="h-9 w-9">
-                    <User className="h-4 w-4" />
-                  </Button>
-                </Link>
+                <>
+                  <Link to="/profile">
+                    <Button variant="ghost" size="icon" className="h-9 w-9">
+                      <User className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <Link to="/medical-records">
+                    <Button variant="ghost" size="icon" className="h-9 w-9">
+                      <FileText className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                </>
               )}
               <Link to="/settings">
                 <Button variant="ghost" size="icon" className="h-9 w-9">

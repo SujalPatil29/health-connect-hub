@@ -24,6 +24,19 @@ export interface Appointment {
   fees: number;
 }
 
+export interface Prescription {
+  id: string;
+  appointmentId: string;
+  doctorId: string;
+  doctorName: string;
+  patientId: string;
+  patientName: string;
+  date: string;
+  diagnosis: string;
+  medicines: { name: string; dosage: string; duration: string }[];
+  notes: string;
+}
+
 export interface DoctorProfile {
   userId: string;
   specialization: string;
@@ -38,6 +51,7 @@ interface AuthContextType {
   user: User | null;
   appointments: Appointment[];
   doctorProfiles: DoctorProfile[];
+  prescriptions: Prescription[];
   login: (email: string, password: string) => { success: boolean; error?: string };
   signup: (name: string, email: string, password: string, role: UserRole) => { success: boolean; error?: string };
   logout: () => void;
@@ -45,6 +59,7 @@ interface AuthContextType {
   cancelAppointment: (id: string) => void;
   completeAppointment: (id: string) => void;
   addDoctorProfile: (profile: DoctorProfile) => void;
+  addPrescription: (prescription: Omit<Prescription, "id">) => void;
   verifyDoctor: (userId: string) => void;
   rejectDoctor: (userId: string) => void;
   getAllUsers: () => User[];
@@ -57,6 +72,7 @@ const USERS_KEY = "medibook_users";
 const CURRENT_USER_KEY = "medibook_current_user";
 const APPOINTMENTS_KEY = "medibook_appointments";
 const DOCTOR_PROFILES_KEY = "medibook_doctor_profiles";
+const PRESCRIPTIONS_KEY = "medibook_prescriptions";
 
 // Seed data
 const seedUsers: (User & { password: string })[] = [
@@ -108,11 +124,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [doctorProfiles, setDoctorProfiles] = useState<DoctorProfile[]>(() =>
     getStored(DOCTOR_PROFILES_KEY, seedDoctorProfiles)
   );
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>(() =>
+    getStored(PRESCRIPTIONS_KEY, [])
+  );
 
   useEffect(() => localStorage.setItem(USERS_KEY, JSON.stringify(users)), [users]);
   useEffect(() => localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user)), [user]);
   useEffect(() => localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments)), [appointments]);
   useEffect(() => localStorage.setItem(DOCTOR_PROFILES_KEY, JSON.stringify(doctorProfiles)), [doctorProfiles]);
+  useEffect(() => localStorage.setItem(PRESCRIPTIONS_KEY, JSON.stringify(prescriptions)), [prescriptions]);
 
   const login = (email: string, password: string) => {
     const found = users.find((u) => u.email === email && u.password === password);
@@ -184,12 +204,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const getAllUsers = () => users.map(({ password: _, ...u }) => u);
   const getDoctorProfiles = () => doctorProfiles;
 
+  const addPrescription = (prescription: Omit<Prescription, "id">) => {
+    setPrescriptions((prev) => [...prev, { ...prescription, id: crypto.randomUUID() }]);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
         appointments,
         doctorProfiles,
+        prescriptions,
         login,
         signup,
         logout,
@@ -197,6 +222,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         cancelAppointment,
         completeAppointment,
         addDoctorProfile,
+        addPrescription,
         verifyDoctor,
         rejectDoctor,
         getAllUsers,

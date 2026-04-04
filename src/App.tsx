@@ -15,6 +15,7 @@ import MedicalStores from "./pages/MedicalStores.tsx";
 import VideoConsultation from "./pages/VideoConsultation.tsx";
 import PatientProfile from "./pages/PatientProfile.tsx";
 import Settings from "./pages/Settings.tsx";
+import MedicalRecords from "./pages/MedicalRecords.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["PATIENT"]}>
                   <PatientProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/medical-records"
+              element={
+                <ProtectedRoute allowedRoles={["PATIENT"]}>
+                  <MedicalRecords />
                 </ProtectedRoute>
               }
             />
