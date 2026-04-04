@@ -380,4 +380,93 @@ const SlotManager = () => {
   );
 };
 
+interface PrescriptionFormProps {
+  appointmentId: string;
+  doctorId: string;
+  doctorName: string;
+  patientId: string;
+  patientName: string;
+  date: string;
+  onSubmit: (prescription: Omit<Prescription, "id">) => void;
+}
+
+const PrescriptionForm = ({ appointmentId, doctorId, doctorName, patientId, patientName, date, onSubmit }: PrescriptionFormProps) => {
+  const [open, setOpen] = useState(false);
+  const [diagnosis, setDiagnosis] = useState("");
+  const [notes, setNotes] = useState("");
+  const [medicines, setMedicines] = useState([{ name: "", dosage: "", duration: "" }]);
+
+  const addMedicine = () => setMedicines((prev) => [...prev, { name: "", dosage: "", duration: "" }]);
+  const removeMedicine = (i: number) => setMedicines((prev) => prev.filter((_, idx) => idx !== i));
+  const updateMedicine = (i: number, field: string, value: string) => {
+    setMedicines((prev) => prev.map((m, idx) => (idx === i ? { ...m, [field]: value } : m)));
+  };
+
+  const handleSubmit = () => {
+    if (!diagnosis.trim()) { toast.error("Please enter a diagnosis"); return; }
+    if (medicines.some((m) => !m.name.trim())) { toast.error("Please fill medicine names"); return; }
+    onSubmit({ appointmentId, doctorId, doctorName, patientId, patientName, date, diagnosis, medicines: medicines.filter((m) => m.name.trim()), notes });
+    setOpen(false);
+    toast.success("Prescription added!");
+  };
+
+  if (!open) {
+    return (
+      <Button size="sm" variant="secondary" onClick={() => setOpen(true)}>
+        <FileText className="mr-1 h-3 w-3" /> Add Rx
+      </Button>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <div className="w-full max-w-lg rounded-xl bg-card border border-border p-6 shadow-lg max-h-[85vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-heading text-lg font-semibold text-foreground flex items-center gap-2">
+            <FileText className="h-5 w-5 text-primary" /> Write Prescription
+          </h3>
+          <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+        <p className="text-sm text-muted-foreground mb-4">Patient: <span className="font-medium text-foreground">{patientName}</span></p>
+
+        <div className="space-y-4">
+          <div>
+            <Label className="text-xs">Diagnosis</Label>
+            <Input value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} placeholder="e.g. Viral Fever" className="mt-1" />
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <Label className="text-xs flex items-center gap-1"><Pill className="h-3.5 w-3.5" /> Medicines</Label>
+              <Button size="sm" variant="ghost" onClick={addMedicine}><Plus className="h-3 w-3 mr-1" /> Add</Button>
+            </div>
+            {medicines.map((med, i) => (
+              <div key={i} className="flex gap-2 mb-2">
+                <Input placeholder="Medicine" value={med.name} onChange={(e) => updateMedicine(i, "name", e.target.value)} className="flex-1" />
+                <Input placeholder="Dosage" value={med.dosage} onChange={(e) => updateMedicine(i, "dosage", e.target.value)} className="w-28" />
+                <Input placeholder="Duration" value={med.duration} onChange={(e) => updateMedicine(i, "duration", e.target.value)} className="w-28" />
+                {medicines.length > 1 && (
+                  <button onClick={() => removeMedicine(i)} className="text-muted-foreground hover:text-destructive"><X className="h-4 w-4" /></button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <Label className="text-xs">Notes (optional)</Label>
+            <Textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Additional advice..." className="mt-1" rows={3} />
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <Button onClick={handleSubmit} className="flex-1"><Save className="mr-2 h-4 w-4" /> Save Prescription</Button>
+            <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default DoctorDashboard;
