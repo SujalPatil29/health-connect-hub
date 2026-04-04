@@ -204,12 +204,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const getAllUsers = () => users.map(({ password: _, ...u }) => u);
   const getDoctorProfiles = () => doctorProfiles;
 
+  const addPrescription = (prescription: Omit<Prescription, "id">) => {
+    setPrescriptions((prev) => [...prev, { ...prescription, id: crypto.randomUUID() }]);
+  };
+
   return (
     <AuthContext.Provider
       value={{
         user,
         appointments,
         doctorProfiles,
+        prescriptions,
         login,
         signup,
         logout,
@@ -217,6 +222,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         cancelAppointment,
         completeAppointment,
         addDoctorProfile,
+        addPrescription,
         verifyDoctor,
         rejectDoctor,
         getAllUsers,
