@@ -37,6 +37,18 @@ export interface Prescription {
   notes: string;
 }
 
+export interface DoctorDocument {
+  id: string;
+  doctorId: string;
+  name: string;
+  type: "medical_license" | "degree_certificate" | "id_proof" | "experience_letter" | "other";
+  fileName: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  submittedAt: string;
+  reviewedAt?: string;
+  rejectionReason?: string;
+}
+
 export interface DoctorProfile {
   userId: string;
   specialization: string;
