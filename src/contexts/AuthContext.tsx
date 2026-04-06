@@ -229,6 +229,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setPrescriptions((prev) => [...prev, { ...prescription, id: crypto.randomUUID() }]);
   };
 
+  const submitDocument = (doc: Omit<DoctorDocument, "id" | "status" | "submittedAt">) => {
+    setDoctorDocuments((prev) => [
+      ...prev,
+      { ...doc, id: crypto.randomUUID(), status: "PENDING" as const, submittedAt: new Date().toISOString() },
+    ]);
+  };
+
+  const approveDocument = (docId: string) => {
+    setDoctorDocuments((prev) =>
+      prev.map((d) => (d.id === docId ? { ...d, status: "APPROVED" as const, reviewedAt: new Date().toISOString() } : d))
+    );
+  };
+
+  const rejectDocument = (docId: string, reason: string) => {
+    setDoctorDocuments((prev) =>
+      prev.map((d) => (d.id === docId ? { ...d, status: "REJECTED" as const, reviewedAt: new Date().toISOString(), rejectionReason: reason } : d))
+    );
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -236,6 +255,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         appointments,
         doctorProfiles,
         prescriptions,
+        doctorDocuments,
         login,
         signup,
         logout,
@@ -248,6 +268,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         rejectDoctor,
         getAllUsers,
         getDoctorProfiles,
+        submitDocument,
+        approveDocument,
+        rejectDocument,
       }}
     >
       {children}
