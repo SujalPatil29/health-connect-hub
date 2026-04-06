@@ -64,6 +64,7 @@ interface AuthContextType {
   appointments: Appointment[];
   doctorProfiles: DoctorProfile[];
   prescriptions: Prescription[];
+  doctorDocuments: DoctorDocument[];
   login: (email: string, password: string) => { success: boolean; error?: string };
   signup: (name: string, email: string, password: string, role: UserRole) => { success: boolean; error?: string };
   logout: () => void;
@@ -76,6 +77,9 @@ interface AuthContextType {
   rejectDoctor: (userId: string) => void;
   getAllUsers: () => User[];
   getDoctorProfiles: () => DoctorProfile[];
+  submitDocument: (doc: Omit<DoctorDocument, "id" | "status" | "submittedAt">) => void;
+  approveDocument: (docId: string) => void;
+  rejectDocument: (docId: string, reason: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
