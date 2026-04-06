@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth, Prescription } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import DoctorDocumentUpload from "@/components/DoctorDocumentUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -192,6 +193,11 @@ const DoctorDashboard = () => {
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Document Upload */}
+          <div className="lg:col-span-1">
+            <DoctorDocumentUpload />
           </div>
 
           {/* Slot Management */}

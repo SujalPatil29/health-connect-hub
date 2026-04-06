@@ -37,6 +37,18 @@ export interface Prescription {
   notes: string;
 }
 
+export interface DoctorDocument {
+  id: string;
+  doctorId: string;
+  name: string;
+  type: "medical_license" | "degree_certificate" | "id_proof" | "experience_letter" | "other";
+  fileName: string;
+  status: "PENDING" | "APPROVED" | "REJECTED";
+  submittedAt: string;
+  reviewedAt?: string;
+  rejectionReason?: string;
+}
+
 export interface DoctorProfile {
   userId: string;
   specialization: string;
@@ -52,6 +64,7 @@ interface AuthContextType {
   appointments: Appointment[];
   doctorProfiles: DoctorProfile[];
   prescriptions: Prescription[];
+  doctorDocuments: DoctorDocument[];
   login: (email: string, password: string) => { success: boolean; error?: string };
   signup: (name: string, email: string, password: string, role: UserRole) => { success: boolean; error?: string };
   logout: () => void;
@@ -64,6 +77,9 @@ interface AuthContextType {
   rejectDoctor: (userId: string) => void;
   getAllUsers: () => User[];
   getDoctorProfiles: () => DoctorProfile[];
+  submitDocument: (doc: Omit<DoctorDocument, "id" | "status" | "submittedAt">) => void;
+  approveDocument: (docId: string) => void;
+  rejectDocument: (docId: string, reason: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -72,6 +88,7 @@ const USERS_KEY = "medibook_users";
 const CURRENT_USER_KEY = "medibook_current_user";
 const APPOINTMENTS_KEY = "medibook_appointments";
 const DOCTOR_PROFILES_KEY = "medibook_doctor_profiles";
+const DOCTOR_DOCUMENTS_KEY = "medibook_doctor_documents";
 const PRESCRIPTIONS_KEY = "medibook_prescriptions";
 
 // Seed data
@@ -127,12 +144,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [prescriptions, setPrescriptions] = useState<Prescription[]>(() =>
     getStored(PRESCRIPTIONS_KEY, [])
   );
+  const [doctorDocuments, setDoctorDocuments] = useState<DoctorDocument[]>(() =>
+    getStored(DOCTOR_DOCUMENTS_KEY, [])
+  );
 
   useEffect(() => localStorage.setItem(USERS_KEY, JSON.stringify(users)), [users]);
   useEffect(() => localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user)), [user]);
   useEffect(() => localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments)), [appointments]);
   useEffect(() => localStorage.setItem(DOCTOR_PROFILES_KEY, JSON.stringify(doctorProfiles)), [doctorProfiles]);
   useEffect(() => localStorage.setItem(PRESCRIPTIONS_KEY, JSON.stringify(prescriptions)), [prescriptions]);
+  useEffect(() => localStorage.setItem(DOCTOR_DOCUMENTS_KEY, JSON.stringify(doctorDocuments)), [doctorDocuments]);
 
   const login = (email: string, password: string) => {
     const found = users.find((u) => u.email === email && u.password === password);
@@ -208,6 +229,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setPrescriptions((prev) => [...prev, { ...prescription, id: crypto.randomUUID() }]);
   };
 
+  const submitDocument = (doc: Omit<DoctorDocument, "id" | "status" | "submittedAt">) => {
+    setDoctorDocuments((prev) => [
+      ...prev,
+      { ...doc, id: crypto.randomUUID(), status: "PENDING" as const, submittedAt: new Date().toISOString() },
+    ]);
+  };
+
+  const approveDocument = (docId: string) => {
+    setDoctorDocuments((prev) =>
+      prev.map((d) => (d.id === docId ? { ...d, status: "APPROVED" as const, reviewedAt: new Date().toISOString() } : d))
+    );
+  };
+
+  const rejectDocument = (docId: string, reason: string) => {
+    setDoctorDocuments((prev) =>
+      prev.map((d) => (d.id === docId ? { ...d, status: "REJECTED" as const, reviewedAt: new Date().toISOString(), rejectionReason: reason } : d))
+    );
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -215,6 +255,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         appointments,
         doctorProfiles,
         prescriptions,
+        doctorDocuments,
         login,
         signup,
         logout,
@@ -227,6 +268,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         rejectDoctor,
         getAllUsers,
         getDoctorProfiles,
+        submitDocument,
+        approveDocument,
+        rejectDocument,
       }}
     >
       {children}
