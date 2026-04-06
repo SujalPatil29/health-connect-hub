@@ -195,6 +195,11 @@ const DoctorDashboard = () => {
             </div>
           </div>
 
+          {/* Document Upload */}
+          <div className="lg:col-span-1">
+            <DoctorDocumentUpload />
+          </div>
+
           {/* Slot Management */}
           <div className="lg:col-span-2">
             <SlotManager />
