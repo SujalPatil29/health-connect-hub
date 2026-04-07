@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useAuth, DoctorDocument } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -96,10 +96,27 @@ interface DocumentRowProps {
 }
 
 const DocumentRow = ({ type, label, description, doc, doctorId, onSubmit }: DocumentRowProps) => {
-  const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const allowedTypes = ["application/pdf", "image/jpeg", "image/png", "image/jpg"];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Please upload a PDF, JPG, or PNG file");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("File size must be less than 5MB");
+        return;
+      }
+      setSelectedFile(file);
+    }
+  };
 
   const handleUpload = () => {
-    if (!fileName.trim()) {
+    if (!selectedFile) {
       toast.error("Please select a file first");
       return;
     }
@@ -107,9 +124,10 @@ const DocumentRow = ({ type, label, description, doc, doctorId, onSubmit }: Docu
       doctorId,
       name: label,
       type,
-      fileName: fileName.trim(),
+      fileName: selectedFile.name,
     });
-    setFileName("");
+    setSelectedFile(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
     toast.success(`${label} submitted for review!`);
   };
 
@@ -155,16 +173,28 @@ const DocumentRow = ({ type, label, description, doc, doctorId, onSubmit }: Docu
 
       {(!doc || doc.status === "REJECTED") && (
         <div className="mt-3 ml-6 flex items-center gap-2">
-          <Input
-            type="text"
-            placeholder="Enter document file name (e.g. license.pdf)"
-            value={fileName}
-            onChange={(e) => setFileName(e.target.value)}
-            className="max-w-xs text-sm"
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+            onChange={handleFileChange}
+            className="hidden"
+            id={`file-${type}`}
           />
-          <Button size="sm" onClick={handleUpload}>
-            <Upload className="mr-1 h-3 w-3" /> {doc?.status === "REJECTED" ? "Resubmit" : "Submit"}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => fileInputRef.current?.click()}
+            className="text-sm"
+          >
+            <Upload className="mr-1 h-3 w-3" />
+            {selectedFile ? selectedFile.name : "Choose File"}
           </Button>
+          {selectedFile && (
+            <Button size="sm" onClick={handleUpload}>
+              {doc?.status === "REJECTED" ? "Resubmit" : "Submit"}
+            </Button>
+          )}
         </div>
       )}
     </div>
