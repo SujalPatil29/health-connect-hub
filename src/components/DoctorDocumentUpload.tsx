@@ -120,15 +120,21 @@ const DocumentRow = ({ type, label, description, doc, doctorId, onSubmit }: Docu
       toast.error("Please select a file first");
       return;
     }
-    onSubmit({
-      doctorId,
-      name: label,
-      type,
-      fileName: selectedFile.name,
-    });
-    setSelectedFile(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-    toast.success(`${label} submitted for review!`);
+    const reader = new FileReader();
+    reader.onload = () => {
+      onSubmit({
+        doctorId,
+        name: label,
+        type,
+        fileName: selectedFile.name,
+        fileData: reader.result as string,
+        fileType: selectedFile.type,
+      });
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      toast.success(`${label} submitted for review!`);
+    };
+    reader.readAsDataURL(selectedFile);
   };
 
   const statusIcon = {

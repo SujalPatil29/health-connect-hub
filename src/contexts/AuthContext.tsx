@@ -43,6 +43,8 @@ export interface DoctorDocument {
   name: string;
   type: "medical_license" | "degree_certificate" | "id_proof" | "experience_letter" | "other";
   fileName: string;
+  fileData?: string; // base64 data URL for preview
+  fileType?: string; // MIME type
   status: "PENDING" | "APPROVED" | "REJECTED";
   submittedAt: string;
   reviewedAt?: string;
