@@ -145,6 +145,37 @@ const AdminDashboard = () => {
                         </div>
                       </div>
 
+                      {/* View Document */}
+                      {doc.fileData && (
+                        <div className="mt-2 ml-6">
+                          {doc.fileType?.startsWith("image/") ? (
+                            <div className="rounded-lg border border-border overflow-hidden max-w-sm">
+                              <img src={doc.fileData} alt={doc.name} className="w-full max-h-60 object-contain bg-muted" />
+                            </div>
+                          ) : doc.fileType === "application/pdf" ? (
+                            <a
+                              href={doc.fileData}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+                            >
+                              <Eye className="h-3.5 w-3.5" /> View PDF Document
+                            </a>
+                          ) : (
+                            <a
+                              href={doc.fileData}
+                              download={doc.fileName}
+                              className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+                            >
+                              <Eye className="h-3.5 w-3.5" /> Download Document
+                            </a>
+                          )}
+                        </div>
+                      )}
+                      {!doc.fileData && (
+                        <p className="mt-2 ml-6 text-xs text-muted-foreground italic">No preview available (uploaded before document viewer was added)</p>
+                      )}
+
                       {rejectingDocId === doc.id ? (
                         <div className="mt-3 ml-6 flex items-center gap-2">
                           <Input
