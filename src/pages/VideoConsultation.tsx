@@ -206,10 +206,19 @@ const VideoConsultation = () => {
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted/20">
                   <User className="h-10 w-10 text-background/30" />
                 </div>
-                <p className="text-lg font-medium text-background/70">Connect with {otherParty}</p>
+                <p className="text-lg font-medium text-background/70">
+                  {peerReady ? `Waiting for ${otherParty} to join…` : "Setting up your room…"}
+                </p>
+                <p className="text-xs text-background/50">
+                  You'll be connected automatically when both sides are ready.
+                </p>
 
-                {/* Room ID sharing */}
-                <div className="flex flex-col items-center gap-3 w-full max-w-sm">
+                {/* Manual fallback Room ID sharing */}
+                <details className="w-full max-w-sm">
+                  <summary className="text-xs text-background/50 cursor-pointer text-center">
+                    Having trouble? Connect manually
+                  </summary>
+                <div className="flex flex-col items-center gap-3 w-full mt-3">
                   <p className="text-xs text-background/50">Your Room ID:</p>
                   <div className="flex items-center gap-2 w-full">
                     <code className="flex-1 rounded bg-background/10 px-3 py-2 text-xs text-background/80 truncate">
@@ -240,6 +249,7 @@ const VideoConsultation = () => {
                     Share your Room ID with the other person and paste theirs above to connect.
                   </p>
                 </div>
+                </details>
               </div>
             )}
 
