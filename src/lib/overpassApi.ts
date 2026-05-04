@@ -66,15 +66,33 @@ export async function fetchNearbyStores(lat: number, lng: number, radiusKm = 5):
     out body;
   `;
 
-  const res = await fetch("https://overpass-api.de/api/interpreter", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: `data=${encodeURIComponent(query)}`,
-  });
+  const endpoints = [
+    "https://overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+    "https://overpass.openstreetmap.ru/api/interpreter",
+    "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+  ];
 
-  if (!res.ok) throw new Error("Failed to fetch nearby stores");
-
-  const data = await res.json();
+  let data: any = null;
+  let lastErr: unknown = null;
+  for (const url of endpoints) {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `data=${encodeURIComponent(query)}`,
+      });
+      if (!res.ok) {
+        lastErr = new Error(`HTTP ${res.status}`);
+        continue;
+      }
+      data = await res.json();
+      break;
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  if (!data) throw lastErr ?? new Error("Failed to fetch nearby stores");
 
   const stores: RealMedicalStore[] = data.elements
     .filter((el: any) => el.tags?.name)
