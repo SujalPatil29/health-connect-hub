@@ -31,6 +31,7 @@ const VideoConsultation = () => {
   const [message, setMessage] = useState("");
   const [copied, setCopied] = useState(false);
   const [joinId, setJoinId] = useState("");
+  const [autoCalled, setAutoCalled] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "1",
@@ -42,8 +43,11 @@ const VideoConsultation = () => {
   const [elapsed, setElapsed] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Generate a unique peer ID based on user + appointment
-  const myPeerId = `medibook-${user?.id}-${appointmentId}`.replace(/[^a-zA-Z0-9-]/g, "");
+  // Deterministic per-role peer IDs so both sides can auto-connect
+  const roleSuffix = user?.role === "DOCTOR" ? "doctor" : "patient";
+  const remoteSuffix = user?.role === "DOCTOR" ? "patient" : "doctor";
+  const myPeerId = `medibook-apt-${appointmentId}-${roleSuffix}`.replace(/[^a-zA-Z0-9-]/g, "");
+  const remotePeerId = `medibook-apt-${appointmentId}-${remoteSuffix}`.replace(/[^a-zA-Z0-9-]/g, "");
 
   const {
     localStream, remoteStream, connected, peerReady, error,
@@ -54,6 +58,29 @@ const VideoConsultation = () => {
   useEffect(() => {
     startLocalStream();
   }, [startLocalStream]);
+
+  // Auto-connect: once our peer is ready and local stream is up, try calling the other side.
+  // The doctor initiates; the patient waits to answer. If the doctor isn't there yet, patient
+  // will retry every few seconds until connected.
+  useEffect(() => {
+    if (!peerReady || !localStream || connected || autoCalled) return;
+    const attempt = () => {
+      callPeer(remotePeerId);
+    };
+    // Small delay so the other side has time to register
+    const t = setTimeout(attempt, 800);
+    setAutoCalled(true);
+    return () => clearTimeout(t);
+  }, [peerReady, localStream, connected, autoCalled, callPeer, remotePeerId]);
+
+  // Retry loop: if not connected after a few seconds, try again
+  useEffect(() => {
+    if (connected || !peerReady || !localStream) return;
+    const interval = setInterval(() => {
+      if (!connected) callPeer(remotePeerId);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [connected, peerReady, localStream, callPeer, remotePeerId]);
 
   // Timer
   useEffect(() => {
@@ -179,10 +206,19 @@ const VideoConsultation = () => {
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted/20">
                   <User className="h-10 w-10 text-background/30" />
                 </div>
-                <p className="text-lg font-medium text-background/70">Connect with {otherParty}</p>
+                <p className="text-lg font-medium text-background/70">
+                  {peerReady ? `Waiting for ${otherParty} to join…` : "Setting up your room…"}
+                </p>
+                <p className="text-xs text-background/50">
+                  You'll be connected automatically when both sides are ready.
+                </p>
 
-                {/* Room ID sharing */}
-                <div className="flex flex-col items-center gap-3 w-full max-w-sm">
+                {/* Manual fallback Room ID sharing */}
+                <details className="w-full max-w-sm">
+                  <summary className="text-xs text-background/50 cursor-pointer text-center">
+                    Having trouble? Connect manually
+                  </summary>
+                <div className="flex flex-col items-center gap-3 w-full mt-3">
                   <p className="text-xs text-background/50">Your Room ID:</p>
                   <div className="flex items-center gap-2 w-full">
                     <code className="flex-1 rounded bg-background/10 px-3 py-2 text-xs text-background/80 truncate">
@@ -213,6 +249,7 @@ const VideoConsultation = () => {
                     Share your Room ID with the other person and paste theirs above to connect.
                   </p>
                 </div>
+                </details>
               </div>
             )}
 
