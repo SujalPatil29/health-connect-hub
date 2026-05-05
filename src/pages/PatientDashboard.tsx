@@ -2,7 +2,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, User, XCircle, CheckCircle, AlertCircle, Video } from "lucide-react";
+import { Calendar, Clock, XCircle, CheckCircle, AlertCircle, Video, FileText } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const statusStyles = {
@@ -12,7 +12,7 @@ const statusStyles = {
 };
 
 const PatientDashboard = () => {
-  const { user, appointments, cancelAppointment } = useAuth();
+  const { user, appointments, cancelAppointment, prescriptions } = useAuth();
 
   const myAppointments = appointments
     .filter((a) => a.patientId === user?.id)
@@ -117,6 +117,7 @@ const PatientDashboard = () => {
             <div className="space-y-3">
               {past.map((apt) => {
                 const style = statusStyles[apt.status];
+                const rx = prescriptions.find((p) => p.appointmentId === apt.id);
                 return (
                   <div key={apt.id} className="flex items-center gap-4 rounded-xl border border-border bg-card p-4 shadow-card opacity-80">
                     <img src={apt.doctorImage} alt={apt.doctorName} className="h-12 w-12 rounded-lg object-cover" />
@@ -126,6 +127,13 @@ const PatientDashboard = () => {
                         {new Date(apt.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })} · {apt.timeSlot}
                       </p>
                     </div>
+                    {rx && (
+                      <Link to="/medical-records">
+                        <Button size="sm" variant="secondary">
+                          <FileText className="mr-1 h-3 w-3" /> View Prescription
+                        </Button>
+                      </Link>
+                    )}
                     <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${style.bg}`}>
                       <style.icon className="h-3 w-3" /> {style.label}
                     </span>
