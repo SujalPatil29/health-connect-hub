@@ -150,6 +150,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     getStored(DOCTOR_DOCUMENTS_KEY, [])
   );
 
+  // Migration: old seed used "doctor-1" but doctors list uses "1". Align them.
+  useEffect(() => {
+    const OLD = "doctor-1";
+    const NEW = "1";
+    if (users.some((u) => u.id === OLD)) {
+      setUsers((prev) => prev.map((u) => (u.id === OLD ? { ...u, id: NEW } : u)));
+    }
+    if (doctorProfiles.some((p) => p.userId === OLD)) {
+      setDoctorProfiles((prev) => prev.map((p) => (p.userId === OLD ? { ...p, userId: NEW } : p)));
+    }
+    if (appointments.some((a) => a.doctorId === OLD)) {
+      setAppointments((prev) => prev.map((a) => (a.doctorId === OLD ? { ...a, doctorId: NEW } : a)));
+    }
+    if (user?.id === OLD) {
+      setUser({ ...user, id: NEW });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => localStorage.setItem(USERS_KEY, JSON.stringify(users)), [users]);
   useEffect(() => localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user)), [user]);
   useEffect(() => localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments)), [appointments]);
