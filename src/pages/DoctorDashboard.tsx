@@ -29,7 +29,9 @@ const DoctorDashboard = () => {
   const { user, appointments, doctorProfiles, addDoctorProfile, completeAppointment, cancelAppointment, addPrescription, prescriptions } = useAuth();
 
   const profile = doctorProfiles.find((p) => p.userId === user?.id);
-  const myAppointments = appointments.filter((a) => a.doctorId === user?.id);
+  const myAppointments = appointments.filter(
+    (a) => a.doctorId === user?.id || (user?.name && a.doctorName === user.name)
+  );
   const upcoming = myAppointments.filter((a) => a.status === "BOOKED");
   const completed = myAppointments.filter((a) => a.status === "COMPLETED");
 
