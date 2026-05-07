@@ -156,7 +156,7 @@ const VideoConsultation = () => {
     : appointment?.doctorName || "Doctor";
 
   return (
-    <div className="flex h-screen flex-col bg-foreground/95">
+    <div className="fixed inset-0 z-50 flex h-screen w-screen flex-col bg-foreground/95">
       {/* Top Bar */}
       <div className="flex items-center justify-between border-b border-foreground/10 px-4 py-3">
         <div className="flex items-center gap-3">
