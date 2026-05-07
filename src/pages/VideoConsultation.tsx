@@ -192,8 +192,8 @@ const VideoConsultation = () => {
 
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex flex-1 flex-col">
-          <div className="relative flex flex-1 items-center justify-center">
+        <div className="flex flex-1 flex-col min-h-0">
+          <div className="relative flex flex-1 items-center justify-center min-h-0 overflow-hidden">
             {/* Remote Video or Connection Panel */}
             {connected && remoteStream ? (
               <VideoPlayer
@@ -273,7 +273,7 @@ const VideoConsultation = () => {
           </div>
 
           {/* Controls */}
-          <div className="flex items-center justify-center gap-3 border-t border-foreground/10 py-4">
+          <div className="flex shrink-0 items-center justify-center gap-3 border-t border-foreground/10 py-4 bg-foreground/95">
             <Button variant="outline" size="icon"
               className={`h-12 w-12 rounded-full border-background/20 ${
                 micOn ? "bg-background/10 text-background hover:bg-background/20"
