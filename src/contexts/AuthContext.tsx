@@ -97,17 +97,17 @@ const PRESCRIPTIONS_KEY = "medibook_prescriptions";
 const seedUsers: (User & { password: string })[] = [
   { id: "admin-1", name: "Admin User", email: "admin@medibook.com", password: "admin123", role: "ADMIN" },
   { id: "patient-1", name: "John Doe", email: "patient@medibook.com", password: "patient123", role: "PATIENT" },
-  { id: "doctor-1", name: "Dr. Anjali Mehta", email: "doctor@medibook.com", password: "doctor123", role: "DOCTOR" },
+  { id: "1", name: "Dr. Anjali Mehta", email: "doctor@medibook.com", password: "doctor123", role: "DOCTOR" },
 ];
 
 const seedDoctorProfiles: DoctorProfile[] = [
-  { userId: "doctor-1", specialization: "Cardiologist", experience: 14, fees: 800, verified: true, education: "MD, DM Cardiology - AIIMS Delhi", hospital: "Fortis Escorts Heart Institute, Delhi" },
+  { userId: "1", specialization: "Cardiologist", experience: 14, fees: 800, verified: true, education: "MD, DM Cardiology - AIIMS Delhi", hospital: "Fortis Escorts Heart Institute, Delhi" },
 ];
 
 const seedAppointments: Appointment[] = [
   {
     id: "apt-1",
-    doctorId: "doctor-1",
+    doctorId: "1",
     doctorName: "Dr. Anjali Mehta",
     doctorSpecialization: "Cardiologist",
     doctorImage: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&h=300&fit=crop&crop=face",
@@ -149,6 +149,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [doctorDocuments, setDoctorDocuments] = useState<DoctorDocument[]>(() =>
     getStored(DOCTOR_DOCUMENTS_KEY, [])
   );
+
+  // Migration: old seed used "doctor-1" but doctors list uses "1". Align them.
+  useEffect(() => {
+    const OLD = "doctor-1";
+    const NEW = "1";
+    if (users.some((u) => u.id === OLD)) {
+      setUsers((prev) => prev.map((u) => (u.id === OLD ? { ...u, id: NEW } : u)));
+    }
+    if (doctorProfiles.some((p) => p.userId === OLD)) {
+      setDoctorProfiles((prev) => prev.map((p) => (p.userId === OLD ? { ...p, userId: NEW } : p)));
+    }
+    if (appointments.some((a) => a.doctorId === OLD)) {
+      setAppointments((prev) => prev.map((a) => (a.doctorId === OLD ? { ...a, doctorId: NEW } : a)));
+    }
+    if (user?.id === OLD) {
+      setUser({ ...user, id: NEW });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => localStorage.setItem(USERS_KEY, JSON.stringify(users)), [users]);
   useEffect(() => localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user)), [user]);
